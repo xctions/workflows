@@ -61,6 +61,7 @@ runs:
     # each step in the composite run must be a separate shell
     # so cd doesn't persist between steps
     - name: Install dependencies
+      id: temp
       shell: bash
       run: |
         ls -al
