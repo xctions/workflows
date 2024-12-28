@@ -28,9 +28,9 @@ runs:
           echo "_PYTHON_WORKSPACE=$_PYTHON_WORKSPACE" >> $GITHUB_ENV
 
           echo "_PYTHON_WORKSPACE is set to $_PYTHON_WORKSPACE"
+        else
+          echo "_PYTHON_WORKSPACE is already set to $_PYTHON_WORKSPACE"
         fi
-
-        echo "_PYTHON_WORKSPACE is already set to $_PYTHON_WORKSPACE"
 
     # The scripts/${{ inputs.module }} directory is created under $GITHUB_WORKSPACE/.python_workspace
     - name: Checkout code
@@ -58,23 +58,25 @@ runs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
+
+    - name: Setup Working Directory
+      id: workdir
+      shell: bash
+      run: |
+        workdir="$GITHUB_WORKSPACE/.python_workspace/${{ inputs.module }}"
+        echo "workdir=$workdir" >> $GITHUB_OUTPUT
+
     # each step in the composite run must be a separate shell
     # so cd doesn't persist between steps
     - name: Install dependencies
       id: temp
       shell: bash
       run: |
-        ls -al
-        workdir="${{ env._PYTHON_WORKSPACE }}/${{ inputs.module }}"
-        cd $workdir
-        ls -al
+        cd "${{ steps.workdir.outputs.workdir }}"
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-        echo "workdir=$workdir" >> $GITHUB_OUTPUT
+        pip install -r requirements.txt       
 
     - name: Execute Python Script
       shell: bash
       run: |
-        cd ${{ steps.temp.outputs.workdir }}
-        python main.py
+        python "${{ steps.workdir.outputs.workdir }}/main.py"
