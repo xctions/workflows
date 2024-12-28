@@ -42,8 +42,10 @@ runs:
         # Check if the path starts with /
         if [[ "${{ inputs.path }}" == /* ]]; then
           temp_path="$_TEMP_DIR${{ inputs.path }}"
+          echo "input path starts with /"
         else
           temp_path="$_TEMP_DIR/${{ inputs.path }}"
+          echo "input path doesn't start with /"
         fi
         
         echo "temp_path=$temp_path" >> $GITHUB_OUTPUT
