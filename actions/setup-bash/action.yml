@@ -1,0 +1,16 @@
+name: Setup Bash Scripts
+description: clone bash scripts
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        repository: zdpk/workflows
+        ref: main
+        
+    - name: Clone Bash Scripts
+      shell: bash
+      run: |
+        git clone

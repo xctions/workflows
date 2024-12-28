@@ -1,0 +1,33 @@
+name: Temp Directory
+description: Create a temporary directory for storing files
+
+inputs:
+  path: 
+    description: The path of the file saved to the temporary directory
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check if temporary directory exists
+      shell: bash
+      run: |
+        if [[ -z "$_TEMP_DIR" || ! -d "$_TEMP_DIR" ]]; then
+          echo "_TEMP_DIR doesn't exist at $_TEMP_DIR"
+          exit 0
+        fi
+
+    - name: Check if file exists
+      shell: bash
+      run: |
+        if [[ ! -f "$_TEMP_DIR/${{ inputs.path }}" ]]; then
+          echo "File doesn't exist at $_TEMP_DIR/${{ inputs.path }}"
+          exit 1
+        fi
+  
+outputs:
+  path:
+    description: The path to the temporary directory
+    value: "$_TEMP_DIR/${{ inputs.path }}"
+ 
+ 

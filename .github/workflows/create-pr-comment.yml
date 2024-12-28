@@ -1,0 +1,36 @@
+name: Create Comment of Pull Request
+
+on:
+  workflow_call:
+    inputs:
+      body:
+        type: string
+        description: "PR Comment Body"
+        required: true
+      pr_number:
+        type: string
+        description: "Pull Request number"
+        required: true
+jobs:
+  create-comment:
+    outputs:
+      status: ${{ steps.create-pr.outputs.status }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create PR Comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "${{ inputs.body }}" > input.txt
+
+          gh pr comment ${{ inputs.pr_number }} \
+            -F input.txt \
+            -R ${{ github.repository }}
+
+          # if [[ $? -eq 0 && "$resp" -ge 200 && "$resp" -lt 300 ]]; then
+          #   echo "status=success" >> $GITHUB_OUTPUT
+          # else
+          #   echo "status=failure" >> $GITHUB_OUTPUT
+          # fi

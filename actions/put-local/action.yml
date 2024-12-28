@@ -1,0 +1,47 @@
+name: Temp Directory
+description: Create a temporary directory for storing files
+
+inputs:
+  path: 
+    description: The path of the file or directory saved to the temporary directory
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check if temporary directory exists
+      shell: bash
+      id: exist
+      run: |
+        if [[ -n "$_TEMP_DIR" && -d "$_TEMP_DIR" ]]; then
+          echo "exist=true" >> $GITHUB_OUTPUT
+        else
+          echo "exist=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create Temp Directory If Not Exist
+      if: steps.exist.outputs.exist == 'false'
+      shell: bash
+      run: |
+        exist="${{ steps.exist.outputs.exist }}"
+
+        _TEMP_DIR="$GITHUB_WORKSPACE/$(uuidgen)"
+        mkdir -p "$_TEMP_DIR"
+        echo "_TEMP_DIR=$_TEMP_DIR" >> $GITHUB_ENV
+
+        echo "Temp directory created at $_TEMP_DIR"
+        
+    - name: Copy File to Temp Directory
+      shell: bash
+      run: |
+        path="$_TEMP_DIR/${{ inputs.path }}"
+        cp -R "${{ inputs.path }}" "$path"
+
+        echo "File copied to $path" 
+  
+outputs:
+  path:
+    description: The path to the temporary directory
+    value: "$_TEMP_DIR/${{ inputs.path }}"
+ 
+ 

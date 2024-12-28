@@ -1,0 +1,53 @@
+name: Execute Python Script
+description: Set up Python environment for running Python scripts and Execute it
+
+inputs:
+  python-version:
+    description: 'The version of Python to use'
+    required: true
+    default: '3.8'
+
+  module:
+    description: 'The module of the Python file to run'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        repository: xctions/workflows
+        ref: main
+        path: tmp
+        fetch-depth: 0
+        sparse-checkout: scripts/${{ inputs.module }}
+        sparse-checkout-cone-mode: true
+
+    - uses: xctions/workflows/actions/put-local@main
+      id: temp
+      with:
+        path: ${{ inputs.module }}
+
+    # If the Python version is not already installed,
+    # skip the installation
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    # each step in the composite run must be a separate shell
+    # so cd doesn't persist between steps
+    - name: Install dependencies
+      shell: bash
+      run: |
+        workdir="${{ steps.temp.outputs.path }}/scripts/${{ inputs.module }}"
+        cd $workdir
+        python -m pip install -r requirements.txt
+        
+        echo "workdir=$workdir" >> $GITHUB_OUTPUT
+
+    - name: Execute Python Script
+      shell: bash
+      run: |
+        python "${{ steps.temp.outputs.workdir }}/main.py"
