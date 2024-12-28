@@ -12,8 +12,8 @@ runs:
     - name: Check if temporary directory exists
       shell: bash
       run: |
-        if [[ -z "${{ env._TEMP_DIR }}" || ! -d "${{ env.$_TEMP_DIR }}" ]]; then
-          echo "_TEMP_DIR doesn't exist at $_TEMP_DIR"
+        if [[ -z "${{ env._TEMP_DIR }}" || ! -d "${{ env._TEMP_DIR }}" ]]; then
+          echo "_TEMP_DIR doesn't exist at ${{ env._TEMP_DIR }}"
           exit 0
         fi
   

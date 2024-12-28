@@ -57,7 +57,7 @@ runs:
     - name: Copy File to Temp Directory
       shell: bash
       run: |
-        cp -R "${{ inputs.path }}" "$_TEMP_DIR"
+        cp -R "${{ inputs.path }}" "${{ env._TEMP_DIR }}"
 
     - name: Debug Info
       shell: bash
@@ -65,7 +65,7 @@ runs:
       run: |
         echo ==============================================
         echo "temp_path=${{ steps.join.outputs.temp_path }}"
-        ls -l "$_TEMP_DIR"
+        ls -l "{{ env.$_TEMP_DIR }}"
         echo ==============================================
   
 outputs:
