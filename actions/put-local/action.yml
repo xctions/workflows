@@ -47,10 +47,7 @@ runs:
     - name: Copy File to Temp Directory
       shell: bash
       run: |
-        temp_path="${{ steps.join.outputs.temp_path }}"
-        cp -R "${{ inputs.path }}" "$temp_path"
-
-        echo "File copied to $temp_path" 
+        cp -R "${{ inputs.path }}" "$_TEMP_DIR"
   
 outputs:
   temp_path:
