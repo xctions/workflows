@@ -35,7 +35,8 @@ runs:
     - name: Check if file exists
       shell: bash
       run: |
-        if [[ ! -f "${{ steps.join.outputs.temp_path }}" ]]; then
+        # -e: file or dir exists
+        if [[ ! -e "${{ steps.join.outputs.temp_path }}" ]]; then
           echo "File doesn't exist at ${{ steps.join.outputs.temp_path }}"
           exit 1
         fi
