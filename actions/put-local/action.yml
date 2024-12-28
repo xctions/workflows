@@ -25,7 +25,7 @@ runs:
       run: |
         exist="${{ steps.exist.outputs.exist }}"
 
-        _TEMP_DIR="$GITHUB_WORKSPACE/$(uuidgen)"
+        _TEMP_DIR="$GITHUB_WORKSPACE/$(uuidgen)/"
         mkdir -p "$_TEMP_DIR"
         echo "_TEMP_DIR=$_TEMP_DIR" >> $GITHUB_ENV
 
