@@ -25,7 +25,7 @@ runs:
           temp_path="$_TEMP_DIR.root${{ inputs.path }}"
           echo "input path starts with /"
         else
-          temp_path="$_TEMP_DIR./${{ inputs.path }}"
+          temp_path="$_TEMP_DIR${{ inputs.path }}"
           echo "input path doesn't start with /"
         fi
         
