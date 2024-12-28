@@ -75,5 +75,5 @@ runs:
     - name: Execute Python Script
       shell: bash
       run: |
-        cd $workdir
-        python "${{ steps.temp.outputs.workdir }}/main.py"
+        cd ${{ steps.temp.outputs.workdir }}
+        python main.py
