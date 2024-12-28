@@ -63,7 +63,7 @@ runs:
       id: workdir
       shell: bash
       run: |
-        workdir="$GITHUB_WORKSPACE/.python_workspace/${{ inputs.module }}"
+        workdir="${{ env._PYTHON_WORKSPACE }}/${{ inputs.module }}"
         echo "workdir=$workdir" >> $GITHUB_OUTPUT
 
     # each step in the composite run must be a separate shell
