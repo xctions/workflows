@@ -31,17 +31,30 @@ runs:
 
         echo "Temp directory created at $_TEMP_DIR"
         
+    - name: Join the path
+      id: join
+      shell: bash
+      run: |
+        # Check if the path starts with /
+        if [[ "${{ inputs.path }}" == /* ]]; then
+          temp_path="$_TEMP_DIR${{ inputs.path }}"
+        else
+          temp_path="$_TEMP_DIR/${{ inputs.path }}"
+        fi
+        
+        echo "temp_path=$temp_path" >> $GITHUB_OUTPUT
+
     - name: Copy File to Temp Directory
       shell: bash
       run: |
-        path="$_TEMP_DIR/${{ inputs.path }}"
-        cp -R "${{ inputs.path }}" "$path"
+        temp_path="$_TEMP_DIR/${{ steps.join.outputs.temp_path }}"
+        cp -R "${{ inputs.path }}" "$temp_path"
 
-        echo "File copied to $path" 
+        echo "File copied to $temp_path" 
   
 outputs:
-  path:
+  temp_path:
     description: The path to the temporary directory
-    value: "$_TEMP_DIR/${{ inputs.path }}"
+    value: "${{ steps.join.outputs.temp_path }}"
  
  

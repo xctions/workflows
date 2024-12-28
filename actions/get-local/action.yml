@@ -25,9 +25,22 @@ runs:
           exit 1
         fi
   
+    - name: Join the path
+      id: join
+      shell: bash
+      run: |
+        # Check if the path starts with /
+        if [[ "${{ inputs.path }}" == /* ]]; then
+          temp_path="$_TEMP_DIR${{ inputs.path }}"
+        else
+          temp_path="$_TEMP_DIR/${{ inputs.path }}"
+        fi
+        
+        echo "temp_path=$temp_path" >> $GITHUB_OUTPUT
+
 outputs:
   path:
     description: The path to the temporary directory
-    value: "$_TEMP_DIR/${{ inputs.path }}"
+    value: "${{ steps.join.outputs.temp_path }}"
  
  

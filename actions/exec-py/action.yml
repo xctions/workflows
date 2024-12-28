@@ -41,7 +41,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-        workdir="${{ steps.temp.outputs.path }}/scripts/${{ inputs.module }}"
+        workdir="${{ steps.temp.outputs.temp_path }}/scripts/${{ inputs.module }}"
         cd $workdir
         python -m pip install -r requirements.txt
         
