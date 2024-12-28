@@ -63,8 +63,9 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-        workdir="${{ env._PYTHON_WORKSPACE }}/${{ inputs.module }}"
+        workdir="${{ env._PYTHON_WORKSPACE }}"
         cd $workdir
+        ls -al
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
