@@ -65,7 +65,7 @@ runs:
       run: |
         echo ==============================================
         echo "temp_path=${{ steps.join.outputs.temp_path }}"
-        ls -l "{{ env.$_TEMP_DIR }}"
+        ls -l "${{ env._TEMP_DIR }}"
         echo ==============================================
   
 outputs:
