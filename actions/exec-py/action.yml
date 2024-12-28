@@ -63,6 +63,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
+        ls -al
         workdir="${{ env._PYTHON_WORKSPACE }}"
         cd $workdir
         ls -al
