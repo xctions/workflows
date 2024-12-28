@@ -38,7 +38,7 @@ runs:
       with:
         repository: xctions/workflows
         ref: main
-        path: "$GITHUB_WORKSPACE/.python_workspace"
+        path: .python_workspace
         fetch-depth: 0
         sparse-checkout: "scripts/${{ inputs.module }}"
         sparse-checkout-cone-mode: true
@@ -64,7 +64,7 @@ runs:
       shell: bash
       run: |
         ls -al
-        workdir="${{ env._PYTHON_WORKSPACE }}"
+        workdir="${{ env._PYTHON_WORKSPACE }}/${{ inputs.module }}"
         cd $workdir
         ls -al
         python -m pip install --upgrade pip
