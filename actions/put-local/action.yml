@@ -5,6 +5,10 @@ inputs:
   path: 
     description: The path of the file or directory saved to the temporary directory
     required: true
+  debug:
+    description: 'Print debug information'
+    required: false
+    default: 'true'
 
 runs:
   using: 'composite'
@@ -51,6 +55,7 @@ runs:
 
     - name: Debug Info
       shell: bash
+      if: ${{ inputs.debug == 'true' }}
       run: |
         echo ==============================================
         echo "temp_path=${{ steps.join.outputs.temp_path }}"
