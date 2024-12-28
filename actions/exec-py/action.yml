@@ -40,7 +40,7 @@ runs:
         ref: main
         path: "$GITHUB_WORKSPACE/.python_workspace"
         fetch-depth: 0
-        sparse-checkout: "$_PYTHON_WORKSPACE"
+        sparse-checkout: "scripts/${{ inputs.module }}"
         sparse-checkout-cone-mode: true
 
     - name: Cache Python dependencies
