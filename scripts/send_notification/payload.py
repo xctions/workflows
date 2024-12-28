@@ -26,12 +26,6 @@ class Payload:
         self.platform = platform
         self.webhook_url = webhook_url
 
-
-class Payload:
-    def __init__(self, platform, status):
-        self.platform = platform
-        self.status = status
-
     def _status_color(self):
         if self.platform == "discord":
             if self.status == "success":
