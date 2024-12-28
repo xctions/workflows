@@ -2,7 +2,7 @@ name: Temp Directory
 description: Create a temporary directory for storing files
 
 inputs:
-  path: 
+  path:
     description: The path of the file saved to the temporary directory
     required: true
 

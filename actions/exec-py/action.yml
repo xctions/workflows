@@ -9,25 +9,47 @@ inputs:
 
   module:
     description: 'The module of the Python file to run'
-    required: true
+    required: false
+    default: '*'
+
+  debug:
+    description: 'Print debug information'
+    required: false
+    default: 'false'
 
 runs:
   using: 'composite'
   steps:
+    - name: Set workspace directory
+      shell: bash
+      run: |
+        if [[ -z "${{ env._PYTHON_WORKSPACE }}" ]]; then
+          _PYTHON_WORKSPACE="$GITHUB_WORKSPACE/.python_workspace/scripts"
+          echo "_PYTHON_WORKSPACE=$_PYTHON_WORKSPACE" >> $GITHUB_ENV
+
+          echo "_PYTHON_WORKSPACE is set to $_PYTHON_WORKSPACE"
+        fi
+
+        echo "_PYTHON_WORKSPACE is already set to $_PYTHON_WORKSPACE"
+
+    # The scripts/${{ inputs.module }} directory is created under $GITHUB_WORKSPACE/.python_workspace
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         repository: xctions/workflows
         ref: main
-        path: tmp
+        path: "$GITHUB_WORKSPACE/.python_workspace"
         fetch-depth: 0
-        sparse-checkout: scripts/${{ inputs.module }}
+        sparse-checkout: "$_PYTHON_WORKSPACE"
         sparse-checkout-cone-mode: true
 
-    - uses: xctions/workflows/actions/put-local@main
-      id: temp
+    - name: Cache Python dependencies
+      uses: actions/cache@v3
       with:
-        path: ${{ inputs.module }}
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-python-
 
     # If the Python version is not already installed,
     # skip the installation
@@ -41,9 +63,10 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-        workdir="${{ steps.temp.outputs.temp_path }}/scripts/${{ inputs.module }}"
+        workdir="${{ env._PYTHON_WORKSPACE }}/scripts/${{ inputs.module }}"
         cd $workdir
-        python -m pip install -r requirements.txt
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
         
         echo "workdir=$workdir" >> $GITHUB_OUTPUT
 
