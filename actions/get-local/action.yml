@@ -16,14 +16,6 @@ runs:
           echo "_TEMP_DIR doesn't exist at $_TEMP_DIR"
           exit 0
         fi
-
-    - name: Check if file exists
-      shell: bash
-      run: |
-        if [[ ! -f "$_TEMP_DIR/${{ inputs.path }}" ]]; then
-          echo "File doesn't exist at $_TEMP_DIR/${{ inputs.path }}"
-          exit 1
-        fi
   
     - name: Join the path
       id: join
@@ -37,6 +29,15 @@ runs:
         fi
         
         echo "temp_path=$temp_path" >> $GITHUB_OUTPUT
+
+
+    - name: Check if file exists
+      shell: bash
+      run: |
+        if [[ ! -f "${{ steps.join.outputs.temp_path }}" ]]; then
+          echo "File doesn't exist at ${{ steps.join.outputs.temp_path }}"
+          exit 1
+        fi
 
 outputs:
   path:
