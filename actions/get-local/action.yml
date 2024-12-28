@@ -12,7 +12,7 @@ runs:
     - name: Check if temporary directory exists
       shell: bash
       run: |
-        if [[ -z "$_TEMP_DIR" || ! -d "$_TEMP_DIR" ]]; then
+        if [[ -z "${{ env._TEMP_DIR }}" || ! -d "${{ env.$_TEMP_DIR" }} ]]; then
           echo "_TEMP_DIR doesn't exist at $_TEMP_DIR"
           exit 0
         fi
@@ -22,17 +22,17 @@ runs:
       shell: bash
       run: |
         if [[ "${{ inputs.path }}" == /* ]]; then
-          temp_path="$_TEMP_DIR.root${{ inputs.path }}"
+          temp_path="${{ env._TEMP_DIR }}.root${{ inputs.path }}"
           echo "input path starts with /"
         else
-          temp_path="$_TEMP_DIR${{ inputs.path }}"
+          temp_path="${{ env._TEMP_DIR }}${{ inputs.path }}"
           echo "input path doesn't start with /"
         fi
         
         echo ==========================================
         echo "temp_path=$temp_path"
         echo ==========================================
-        
+
         echo "temp_path=$temp_path" >> $GITHUB_OUTPUT
 
 
