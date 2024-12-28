@@ -29,6 +29,10 @@ runs:
           echo "input path doesn't start with /"
         fi
         
+        echo ==========================================
+        echo "temp_path=$temp_path"
+        echo ==========================================
+        
         echo "temp_path=$temp_path" >> $GITHUB_OUTPUT
 
 
