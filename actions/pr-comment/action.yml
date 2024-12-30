@@ -24,7 +24,7 @@ runs:
   using: "composite"
   steps:
     - name: Find PR Comment ID
-      id: find-comment-id
+      id: find-comment
       uses: peter-evans/find-comment-id@v2
       with:
         issue-number: ${{ inputs.pr_number }}
@@ -37,8 +37,8 @@ runs:
       with:
         token: ${{ inputs.token }}
         issue-number: ${{ inputs.pr_number }}
-        comment-id: ${{ inputs.pr_number }}
-        edit-mode: "replace"
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        edit-mode: replace
         body: |
           ${{ inputs.meta_comment }}
           ${{ inputs.body }}
