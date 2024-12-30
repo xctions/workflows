@@ -1,0 +1,46 @@
+name: Add PR Comment
+description: add a comment to a pull request
+
+inputs:
+  token:
+    description: "GitHub Token"
+    required: true
+  pr_number:
+    description: "Pull Request number"
+    required: true
+  body:
+    description: "PR Comment Body"
+    required: true
+  author:
+    description: "Author of the comment"
+    required: false
+    default: "Github-Actions[bot]"
+  meta_comment:
+    description: "Meta comment"
+    required: false
+    default: "<!-- AUTOMATED PR COMMENT -->"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Find PR Comment ID
+      id: find-comment-id
+      uses: peter-evans/find-comment-id@v2
+      with:
+        issue-number: ${{ inputs.pr_number }}
+        author: ${{ inputs.author }}
+        token: ${{ inputs.token }}
+        body-includes: ${{ inputs.meta_comment }}
+
+    - name: Create PR Comment
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        token: ${{ inputs.token }}
+        issue-number: ${{ inputs.pr_number }}
+        comment-id: ${{ inputs.pr_number }}
+        edit-mode: "replace"
+        body: |
+          ${{ inputs.meta_comment }}
+          ${{ inputs.body }}
+        
+
