@@ -42,7 +42,7 @@ runs:
       id: extract
       shell: bash
       run: |
-        body=${{ steps.find.outputs.comment-body }}
+        body="${{ steps.find.outputs.comment-body }}"
 
         if [[ -z "${{ inputs.find_section }}" ]]; then
           result=$body
