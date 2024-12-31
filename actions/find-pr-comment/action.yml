@@ -46,10 +46,10 @@ runs:
         partial_delimeter="${{ inputs.partial_delimeter }}"
         
         if [[ -z "$partial_delimeter" ]]; then
-          partial_delimeter="$partial_delimeter"
+          partial_body=""
         else
-          partial_body=$(sed -n '/$partial_delimeter/,/$partial_delimeter/p' <<< $body)
-          partial_body=$(sed '1d;$d' <<< $result)
+          partial_body=$(sed -n '/$partial_delimeter/,/$partial_delimeter/p' <<< "$body")
+          partial_body=$(sed '1d;$d' <<< "$partial_body")
         fi
         echo "body=$body"
         echo "partial_body=$partial_body"
