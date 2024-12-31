@@ -57,7 +57,7 @@ runs:
 outputs:
   comment_id: 
     description: "Comment ID"
-    value: ${{ steps.find-comment.outputs.comment_id }}
+    value: ${{ steps.find.outputs.comment-id }}
   result:
     description: "Comment"
     value: ${{ steps.extract.outputs.result }}
