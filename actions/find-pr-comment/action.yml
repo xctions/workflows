@@ -44,7 +44,8 @@ runs:
       run: |
         body="${{ steps.find.outputs.comment-body }}"
         partial_delimeter="${{ inputs.partial_delimeter }}"
-        if [[ -z "$partial_section" ]]; then
+        
+        if [[ -z "$partial_delimeter" ]]; then
           partial_delimeter="$partial_delimeter"
         else
           partial_body=$(sed -n '/$partial_delimeter/,/$partial_delimeter/p' <<< $body)
