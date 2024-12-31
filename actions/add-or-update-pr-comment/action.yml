@@ -1,5 +1,5 @@
-name: Add PR Comment
-description: add a comment to a pull request
+name: Add or Update PR Comment
+description: add or update a comment to a pull request
 
 inputs:
   token:
@@ -19,7 +19,7 @@ inputs:
     description: "Meta comment"
     required: false
     default: "<!-- AUTOMATED PR COMMENT -->"
-
+    
 runs:
   using: "composite"
   steps:
@@ -32,7 +32,11 @@ runs:
         token: ${{ inputs.token }}
         body-includes: ${{ inputs.meta_comment }}
 
-    - name: Create PR Comment
+    # 1. If PR comment doesn't exist, create a new comment
+    # 2. If PR comment exists, but the body is same, do nothing
+    # 3. If PR comment exists, but the body is different, edit the comment
+    # can see edit history of the comment
+    - name: Create or Update PR Comment
       uses: peter-evans/create-or-update-comment@v4
       with:
         token: ${{ inputs.token }}
