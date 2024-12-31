@@ -16,7 +16,7 @@ inputs:
     description: "Meta comment"
     required: false
     default: "<!-- AUTOMATED PR COMMENT -->"
-  find_section:
+  partial_section:
     description: "Part of the comment looking for"
     required: false
     default: ""
@@ -45,22 +45,25 @@ runs:
         body="${{ steps.find.outputs.comment-body }}"
 
         if [[ -z "${{ inputs.find_section }}" ]]; then
-          result=$body
+          partial_section=""
         else
-          result=$(sed -n '/${{ inputs.find_section }}/,/${{ inputs.find_section }}/p' <<< $body)
-          result=$(sed '1d;$d' <<< $result)
+          partial_section=$(sed -n '/${{ inputs.find_section }}/,/${{ inputs.find_section }}/p' <<< $body)
+          partial_section=$(sed '1d;$d' <<< $result)
         fi
         echo "body=$body"
-        echo "result=$result"
+        echo "partial_section=$partial_section"
 
-        echo "result=$result" >> $GITHUB_OUTPUT
+        echo "partial_section=$partial_section" >> $GITHUB_OUTPUT
 outputs:
   comment_id: 
     description: "Comment ID"
     value: ${{ steps.find.outputs.comment-id }}
-  result:
+  body:
+    description: "Comment Body"
+    value: ${{ steps.find.outputs.comment-body }}
+  partial_section:
     description: "Comment"
-    value: ${{ steps.extract.outputs.result }}
+    value: ${{ steps.extract.outputs.partial_section }}
   author:
     description: "Author"
     value: ${{ steps.find.outputs.author }}

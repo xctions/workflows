@@ -19,6 +19,10 @@ inputs:
     description: "Meta comment"
     required: false
     default: "<!-- AUTOMATED PR COMMENT -->"
+  partial:
+    description: "Part of the comment looking for"
+    required: false
+    default: ""
     
 runs:
   using: "composite"
