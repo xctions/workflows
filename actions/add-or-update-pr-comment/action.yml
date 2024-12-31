@@ -19,7 +19,7 @@ inputs:
     description: "Meta comment"
     required: false
     default: "<!-- AUTOMATED PR COMMENT -->"
-  partial_section:
+  partial_delimeter:
     description: "Part of the comment looking for"
     required: false
     default: ""
