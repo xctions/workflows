@@ -25,8 +25,8 @@ runs:
   using: "composite"
   steps:
     - name: Find PR Comment by PR ID
-      id: find-comment
-      uses: peter-evans/find-comment@v2
+      id: find
+      uses: peter-evans/find-comment@v3
       with:
         issue-number: ${{ inputs.pr_number }}
         author: ${{ inputs.author }}
@@ -36,13 +36,13 @@ runs:
     - name: Print PR Comment
       shell: bash
       run: |
-        echo "${{ steps.find-comment.outputs.result }}"
+        echo "${{ steps.find.outputs.body }}"
 
     - name: Extract Partial Comment
       id: extract
       shell: bash
       run: |
-        body=${{ steps.find-comment.outputs.body }}
+        body=${{ steps.find.outputs.body }}
 
         if [[ -z "${{ inputs.find_section }}" ]]; then
           result=$body
@@ -61,5 +61,12 @@ outputs:
   result:
     description: "Comment"
     value: ${{ steps.extract.outputs.result }}
+  author:
+    description: "Author"
+    value: ${{ steps.find.outputs.author }}
+  created_at:
+    description: "Created At"
+    value: ${{ steps.find.outputs.comment-created-at }}
+  
 
     
