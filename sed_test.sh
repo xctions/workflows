@@ -19,3 +19,12 @@ echo "==========================="
 
 c=$(echo "$b" | sed '1d;$d')
 echo "$c"
+echo "==========================="
+
+new_body="new body"
+updated=$(sed "/$del/,/$del/c\\
+$del\\
+$new_body\\
+$del" <<< "$a")
+
+echo "updated=$updated"

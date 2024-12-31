@@ -1,0 +1,85 @@
+name: Update PR Comment partially
+description: update a comment to a pull request partially
+
+inputs:
+  token:
+    description: "GitHub Token"
+    required: true
+  pr_number:
+    description: "Pull Request number"
+    required: true
+  author:
+    description: "Author of the comment"
+    required: false
+    default: "Github-Actions[bot]"
+  meta_comment:
+    description: "Meta comment"
+    required: false
+    default: "<!-- AUTOMATED PR COMMENT -->"
+  partial_delimeter:
+    description: "Part of the comment looking for"
+    required: true
+  partial_body:
+    description: "Partial Comment Body"
+    required: true
+    
+runs:
+  using: "composite"
+  steps:
+    - name: Find PR Comment by PR ID
+      id: find
+      uses: peter-evans/find-comment@v3
+      with:
+        issue-number: ${{ inputs.pr_number }}
+        author: ${{ inputs.author }}
+        token: ${{ inputs.token }}
+        body-includes: ${{ inputs.meta_comment }}
+
+    - name: Extract Partial Comment
+      id: extract
+      shell: bash
+      run: |
+        body="${{ steps.find.outputs.comment-body }}"
+        d="${{ inputs.partial_delimeter }}"
+        
+        new_body=$(sed "/$d,/$d/c\\
+        $d\\
+        ${{ inputs.partial_body }}\\
+        $d" <<< "$body")
+
+        echo =========================
+        echo "body=$body"
+        echo =========================
+        echo "new_body=$new_body"
+        echo =========================
+        echo "new_body=$new_body" >> $GITHUB_OUTPUT
+
+    - name: Partial Update PR Comment
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        token: ${{ inputs.token }}
+        issue-number: ${{ inputs.pr_number }}
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        edit-mode: replace
+        body: |
+          ${{ steps.extract.outputs.new_body }}
+        
+outputs:
+  comment_id: 
+    description: "Comment ID"
+    value: ${{ steps.find.outputs.comment-id }}
+  body:
+    description: "Comment Body"
+    value: ${{ steps.find.outputs.comment-body }}
+  partial_body:
+    description: "Comment"
+    value: ${{ steps.extract.outputs.partial_body }}
+  author:
+    description: "Author"
+    value: ${{ steps.find.outputs.author }}
+  created_at:
+    description: "Created At"
+    value: ${{ steps.find.outputs.comment-created-at }}
+  
+
+    
