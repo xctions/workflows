@@ -57,7 +57,7 @@ runs:
         echo "body=$body"
         echo "partial_body=$partial_body"
 
-        echo "partial_body=$partial_body" >> $GITHUB_OUTPUT
+        echo "partial_body=$partial_body" >> $GITHUB_ENV
 outputs:
   comment_id: 
     description: "Comment ID"
@@ -67,7 +67,8 @@ outputs:
     value: ${{ steps.find.outputs.comment-body }}
   partial_body:
     description: "Comment"
-    value: ${{ steps.extract.outputs.partial_body }}
+    # value: ${{ steps.extract.outputs.partial_body }}
+    value: ${{ env.partial_body }}
   author:
     description: "Author"
     value: ${{ steps.find.outputs.author }}
