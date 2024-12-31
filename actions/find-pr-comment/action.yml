@@ -50,6 +50,8 @@ runs:
           result=$(sed -n '/${{ inputs.find_section }}/,/${{ inputs.find_section }}/p' <<< $body)
           result=$(sed '1d;$d' <<< $result)
         fi
+        echo "body=$body"
+        echo "result=$result"
 
         echo "result=$result" >> $GITHUB_OUTPUT
 outputs:
