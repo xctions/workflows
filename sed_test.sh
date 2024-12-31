@@ -12,7 +12,7 @@ xxx
 
 echo "$a"
 echo "==========================="
-b=$(echo "$a" | sed -n '/<!-- A:START -->/,/<!-- A:END -->/p')
+b=$(echo "$a" | sed -n "/<!-- A:START -->/,/<!-- A:END -->/p")
 echo "$b"
 echo "==========================="
 

@@ -48,7 +48,7 @@ runs:
         if [[ -z "$partial_delimeter" ]]; then
           partial_body=""
         else
-          partial_body=$(sed -n '/$partial_delimeter/,/$partial_delimeter/p' <<< "$body")
+          partial_body=$(sed -n "/$partial_delimeter/,/$partial_delimeter/p" <<< "$body")
           partial_body=$(sed '1d;$d' <<< "$partial_body")
         fi
         echo "body=$body"
