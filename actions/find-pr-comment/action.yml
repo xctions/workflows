@@ -43,17 +43,17 @@ runs:
       shell: bash
       run: |
         body="${{ steps.find.outputs.comment-body }}"
-
-        if [[ -z "${{ inputs.partial_section }}" ]]; then
-          partial_section=""
+        partial_delimeter="${{ inputs.partial_delimeter }}"
+        if [[ -z "$partial_section" ]]; then
+          partial_delimeter="$partial_delimeter"
         else
-          partial_section=$(sed -n '/${{ inputs.find_section }}/,/${{ inputs.find_section }}/p' <<< $body)
-          partial_section=$(sed '1d;$d' <<< $result)
+          partial_body=$(sed -n '/$partial_delimeter/,/$partial_delimeter/p' <<< $body)
+          partial_body=$(sed '1d;$d' <<< $result)
         fi
         echo "body=$body"
-        echo "partial_section=$partial_section"
+        echo "partial_body=$partial_body"
 
-        echo "partial_section=$partial_section" >> $GITHUB_OUTPUT
+        echo "partial_body=$partial_body" >> $GITHUB_OUTPUT
 outputs:
   comment_id: 
     description: "Comment ID"
@@ -61,9 +61,9 @@ outputs:
   body:
     description: "Comment Body"
     value: ${{ steps.find.outputs.comment-body }}
-  partial_section:
+  partial_body:
     description: "Comment"
-    value: ${{ steps.extract.outputs.partial_section }}
+    value: ${{ steps.extract.outputs.partial_body }}
   author:
     description: "Author"
     value: ${{ steps.find.outputs.author }}
