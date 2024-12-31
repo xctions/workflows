@@ -3,16 +3,17 @@
 set -e
 
 a=$(echo "ABC
-<!-- A:START -->
+<!-- A -->
 abc
 abc
 xxx
-<!-- A:END -->
+<!-- A -->
 ")
 
+del="<!-- A -->"
 echo "$a"
 echo "==========================="
-b=$(echo "$a" | sed -n "/<!-- A:START -->/,/<!-- A:END -->/p")
+b=$(echo "$a" | sed -n "/$del/,/$del/p")
 echo "$b"
 echo "==========================="
 

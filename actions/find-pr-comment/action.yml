@@ -36,7 +36,8 @@ runs:
     - name: Print PR Comment
       shell: bash
       run: |
-        echo "${{ steps.find.outputs.body }}"
+        echo "partial_delimeter=${{ inputs.partial_delimeter}}"
+        echo "body=${{ steps.find.outputs.body }}"
 
     - name: Extract Partial Comment
       id: extract
@@ -46,8 +47,10 @@ runs:
         partial_delimeter="${{ inputs.partial_delimeter }}"
         
         if [[ -z "$partial_delimeter" ]]; then
+          echo "partial delimited is not provided"
           partial_body=""
         else
+          echo "partial delimited is: $partial_delimeter"
           partial_body=$(sed -n "/$partial_delimeter/,/$partial_delimeter/p" <<< "$body")
           partial_body=$(sed '1d;$d' <<< "$partial_body")
         fi
