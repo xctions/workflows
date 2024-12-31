@@ -44,7 +44,7 @@ runs:
       run: |
         body="${{ steps.find.outputs.comment-body }}"
 
-        if [[ -z "${{ inputs.find_section }}" ]]; then
+        if [[ -z "${{ inputs.partial_section }}" ]]; then
           partial_section=""
         else
           partial_section=$(sed -n '/${{ inputs.find_section }}/,/${{ inputs.find_section }}/p' <<< $body)
